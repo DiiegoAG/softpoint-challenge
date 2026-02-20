@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\API\PropertyController;
+use App\Http\Controllers\API\DashboardController;
 
 Route::prefix('auth')->group(function () {
     Route::post('/register', [AuthController::class, 'register']);
@@ -17,4 +18,5 @@ Route::prefix('auth')->group(function () {
 
 Route::prefix('v1')->middleware('auth:sanctum')->group(function () {
     Route::apiResource('properties', PropertyController::class);
+    Route::get('/dashboard', [DashboardController::class, 'index']);
 });
