@@ -28,4 +28,9 @@ class User extends Authenticatable
         'remember_token',
     ];
 
+    public function properties()
+    {
+        return $this->hasMany(Property::class);
+    }
+
 }
