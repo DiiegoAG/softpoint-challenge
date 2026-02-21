@@ -48,4 +48,9 @@ class Property extends Model
             ", {$this->neighborhood}, {$this->city}, {$this->country}";
     }
 
+    public function scopeOwnedBy($query, $user)
+    {
+        return $query->where('user_id', $user->id);
+    }
+
 }

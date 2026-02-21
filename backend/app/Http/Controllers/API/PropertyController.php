@@ -11,14 +11,18 @@ use App\Http\Requests\Property\UpdatePropertyRequest;
 class PropertyController extends Controller
 {
 
+    public function __construct()
+    {
+        $this->authorizeResource(Property::class, 'property');
+    }
+
     public function index(Request $request)
     {
-        $properties = $request->user()->properties()->with('owner:id,name,email')->get();
+        $properties = Property::ownedBy($request->user())->with('owner:id,name,email')->get();
 
         return response()->json($properties, 200);
     }
 
-    // FALTA IMPLEMENTAR POLITICA DE AUTORIZACION PARA QUE SOLO EL PROPIETARIO PUEDA VER SUS PROPIEDADES
     public function store(StorePropertyRequest $request)
     {
         $data = $request->validated();
