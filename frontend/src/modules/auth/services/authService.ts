@@ -8,6 +8,7 @@ import type {
 } from '../auth.types'
 
 export const authService = {
+
     register: async (payload: RegisterPayload): Promise<AuthResponse> => {
         const { data } = await api.post('/auth/register', payload)
         return data
