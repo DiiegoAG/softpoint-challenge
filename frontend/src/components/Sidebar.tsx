@@ -26,9 +26,11 @@ const Sidebar = () => {
     }, [location]);
 
     const handleLogout = () => {
-        logout();
-        toast.success('Sesión cerrada correctamente');
         navigate('/login');
+        toast.success('Sesión cerrada correctamente');
+        setTimeout(() => {
+            logout();
+        }, 1000);
     };
 
     const navItems = [
