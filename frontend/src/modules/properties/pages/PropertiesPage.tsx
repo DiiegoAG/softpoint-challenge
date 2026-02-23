@@ -170,12 +170,12 @@ const PropertiesPage = () => {
                                 placeholder="Search by name or city..."
                                 value={search}
                                 onChange={(e) => setSearch(e.target.value)}
-                                className="block w-full pl-10 pr-3 py-3 bg-white/10 border border-white/20 rounded-2xl text-white placeholder-white/40 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-transparent transition-all backdrop-blur-md"
+                                className="block w-full pl-10 pr-3 py-1.5 bg-white/10 border border-white/20 rounded-2xl text-white placeholder-white/40 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-transparent transition-all backdrop-blur-md"
                             />
                         </div>
                         <button
                             onClick={handleOpenCreate}
-                            className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-tr from-blue-600 to-indigo-600 text-white font-bold rounded-2xl shadow-lg hover:shadow-blue-500/25 hover:scale-105 active:scale-95 transition-all"
+                            className="inline-flex cursor-pointer items-center gap-2 px-6 py-2 bg-gradient-to-tr from-blue-600 to-indigo-600 text-white font-bold rounded-2xl shadow-lg hover:shadow-blue-500/25 hover:scale-105 active:scale-95 transition-all"
                         >
                             <Plus size={20} />
                             <span className="hidden sm:inline">Add Property</span>
