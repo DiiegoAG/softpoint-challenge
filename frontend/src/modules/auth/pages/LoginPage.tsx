@@ -27,6 +27,11 @@ const LoginPage = () => {
             onSuccess: () => {
                 navigate(from, { replace: true })
             },
+            onError: (error: any) => {
+                toast.error(
+                    error?.response?.data?.message || "Error inesperado"
+                )
+            },
         })
     }
 
@@ -64,7 +69,7 @@ const LoginPage = () => {
                     <form onSubmit={handleSubmit} className="space-y-6">
                         <div className="space-y-4">
                             {/* Email Input */}
-                            <div className="space-y-2">
+                            <div className="">
                                 <label className="text-sm font-semibold text-blue-100 ml-1">Email</label>
                                 <div className="relative group">
                                     <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none transition-colors group-focus-within:text-blue-400 text-blue-100/50">
@@ -79,6 +84,7 @@ const LoginPage = () => {
                                         placeholder="tu@email.com"
                                     />
                                 </div>
+                                <FormErrors error={error?.response?.data?.errors?.email?.[0]} />
                             </div>
 
                             {/* Password Input */}
@@ -107,6 +113,7 @@ const LoginPage = () => {
                                         {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
                                     </button>
                                 </div>
+                                <FormErrors error={error?.response?.data?.errors?.password?.[0]} />
                             </div>
                         </div>
 
