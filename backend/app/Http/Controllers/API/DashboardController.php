@@ -33,7 +33,7 @@ class DashboardController extends Controller
 
         $recentProperties = $user->properties()
             ->latest()
-            ->take(5)
+            ->take(3)
             ->get();
 
         return response()->json([
