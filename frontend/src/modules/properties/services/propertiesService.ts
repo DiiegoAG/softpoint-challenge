@@ -4,14 +4,17 @@ import type {
     Property,
     CreatePropertyPayload,
     UpdatePropertyPayload,
+    PaginatedResponse,
 } from '../properties.types'
 
 const apiVersion = 'v1'
 
 export const propertiesService = {
 
-    getAll: async (): Promise<Property[]> => {
-        const { data } = await api.get(`${apiVersion}/properties`)
+    getAll: async (page = 1, search = ''): Promise<PaginatedResponse<Property>> => {
+        const { data } = await api.get(`${apiVersion}/properties`, {
+            params: { page, search }
+        })
         return data
     },
 

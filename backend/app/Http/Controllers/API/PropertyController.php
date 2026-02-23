@@ -19,7 +19,19 @@ class PropertyController extends Controller
 
     public function index(Request $request)
     {
-        $properties = Property::ownedBy($request->user())->with('owner:id,name,email')->paginate(10);
+        $query = Property::ownedBy($request->user())->with('owner:id,name,email');
+
+        if ($request->has('search')) {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                    ->orWhere('street', 'like', "%{$search}%")
+                    ->orWhere('neighborhood', 'like', "%{$search}%")
+                    ->orWhere('city', 'like', "%{$search}%");
+            });
+        }
+
+        $properties = $query->paginate(10);
 
         return response()->json($properties, 200);
     }
