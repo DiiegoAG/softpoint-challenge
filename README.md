@@ -52,12 +52,16 @@ cd softpoint-challenge
 ```bash
 cd backend
 composer install
-php artisan key:generate
 ```
 
 Copy .env.example to .env
 ```bash
 cp .env.example .env
+```
+
+Generate application key
+```bash
+php artisan key:generate
 ```
 
 Configure database and sactum variables
