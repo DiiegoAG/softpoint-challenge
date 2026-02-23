@@ -27,4 +27,5 @@ export const authService = {
         const { data } = await api.get('/auth/me')
         return data
     },
+
 }
