@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Property;
+use App\Jobs\LogPropertyCreated;
 use App\Http\Requests\Property\StorePropertyRequest;
 use App\Http\Requests\Property\UpdatePropertyRequest;
 
@@ -29,6 +30,8 @@ class PropertyController extends Controller
         $property = new Property($data);
         $property->user_id = $request->user()->id;
         $property->save();
+
+        LogPropertyCreated::dispatch($property);
 
         return response()->json([
             'message' => 'Property created successfully',
