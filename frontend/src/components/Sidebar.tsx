@@ -12,12 +12,14 @@ import {
 } from 'lucide-react';
 import { useAuthStore } from '@/stores/useAuthStore';
 import toast from 'react-hot-toast';
+import { useLogout } from '@/modules/auth/hooks/useLogout';
 
 const Sidebar = () => {
-    const { user, logout } = useAuthStore();
+    const { user } = useAuthStore();
     const navigate = useNavigate();
     const location = useLocation();
     const [isOpen, setIsOpen] = useState(false);
+    const { mutate } = useLogout();
 
     // Close sidebar when route changes on mobile
     useEffect(() => {
@@ -25,12 +27,13 @@ const Sidebar = () => {
     }, [location]);
 
     const handleLogout = () => {
-        navigate('/login');
-        toast.success('Sesión cerrada correctamente');
-        setTimeout(() => {
-            logout();
-        }, 1000);
-    };
+        mutate(undefined, {
+            onSettled: (response: any) => {
+                navigate('/login', { replace: true })
+                toast.success(response?.message || 'Logout successful')
+            }
+        })
+    }
 
     const navItems = [
         { label: 'Dashboard', icon: LayoutDashboard, path: '/' },
