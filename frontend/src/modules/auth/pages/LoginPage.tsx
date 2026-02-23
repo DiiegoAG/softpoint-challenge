@@ -6,7 +6,7 @@ import FormErrors from '@/components/form/FormErrors'
 import toast from 'react-hot-toast'
 
 import { useLogin } from '../hooks/useLogin'
-import { Mail, Lock, Eye, EyeOff, Home, ArrowRight } from 'lucide-react';
+import { Mail, Lock, Eye, EyeOff, Home, ArrowRight, Info } from 'lucide-react';
 
 const LoginPage = () => {
     const navigate = useNavigate()
@@ -56,7 +56,7 @@ const LoginPage = () => {
 
             {/* Main Container */}
             <div className="relative z-10 w-full max-w-md px-6 py-12">
-                <div className="backdrop-blur-xl bg-white/10 p-8 rounded-3xl border border-white/20 shadow-2xl space-y-8">
+                <div className="backdrop-blur-xl bg-white/10 p-8 rounded-3xl border border-white/20 shadow-2xl space-y-2">
 
                     {/* Logo & Header */}
                     <div className="text-center space-y-2">
@@ -93,7 +93,6 @@ const LoginPage = () => {
                             <div className="space-y-2">
                                 <div className="flex items-center justify-between ml-1">
                                     <label className="text-sm font-semibold text-blue-100">Password</label>
-                                    <a href="#" className="text-xs font-bold text-blue-400 hover:text-blue-300 transition-colors">Forgot Password?</a>
                                 </div>
                                 <div className="relative group">
                                     <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none transition-colors group-focus-within:text-blue-400 text-blue-100/50">
@@ -127,6 +126,38 @@ const LoginPage = () => {
                             </>
                         </LoadingButton>
                     </form>
+
+                    {/* Test Credentials */}
+                    <div className="pt-2 border-t border-white/5">
+                        <div className="bg-white/5 rounded-2xl p-4 border border-white/10 group hover:border-blue-500/30 transition-all duration-300">
+                            <div className="flex items-center justify-between mb-3">
+                                <h3 className="text-xs font-bold text-blue-200 uppercase tracking-wider flex items-center gap-2">
+                                    <Info size={14} className="text-blue-400" />
+                                    Test Credentials
+                                </h3>
+                                <div className="h-1.5 w-1.5 rounded-full bg-blue-500 animate-pulse"></div>
+                            </div>
+
+                            <div className="grid grid-cols-1 gap-2">
+                                <div className="flex items-center justify-between px-3 py-2 rounded-xl bg-black/20 border border-white/5">
+                                    <span className="text-[10px] font-bold text-blue-100/40 uppercase">Email</span>
+                                    <span className="text-xs font-mono text-blue-100">demo@example.com</span>
+                                </div>
+                                <div className="flex items-center justify-between px-3 py-2 rounded-xl bg-black/20 border border-white/5">
+                                    <span className="text-[10px] font-bold text-blue-100/40 uppercase">Password</span>
+                                    <span className="text-xs font-mono text-blue-100">password</span>
+                                </div>
+                            </div>
+
+                            <button
+                                type="button"
+                                onClick={() => setFormData({ email: 'demo@example.com', password: 'password' })}
+                                className="w-full cursor-pointer mt-3 py-2.5 rounded-xl bg-blue-500 hover:bg-blue-600 text-white text-xs font-bold transition-all border border-blue-500/20 active:scale-[0.98]"
+                            >
+                                Fill with test credentials
+                            </button>
+                        </div>
+                    </div>
 
                     {/* Sign Up Link */}
                     <p className="text-center text-blue-100/60 text-sm">

@@ -23,7 +23,7 @@ class PropertyTest extends TestCase
         $response = $this->actingAs($user, 'sanctum')->getJson($this->apiUrl);
 
         $response->assertStatus(200)
-                 ->assertJsonCount(3);
+                 ->assertJsonCount(3, 'data');
     }
 
     public function test_user_can_create_property()
