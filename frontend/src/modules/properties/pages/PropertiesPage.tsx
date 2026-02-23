@@ -1,10 +1,12 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
 import {
     Home,
     Search,
-    Plus
+    Plus,
+    ChevronLeft,
+    ChevronRight
 } from 'lucide-react';
 
 import type { CreatePropertyPayload, Property, LaravelValidationError } from '../properties.types';
@@ -22,7 +24,20 @@ import ConfirmationAlert from '@/components/ui/ConfirmationAlert';
 
 const PropertiesPage = () => {
     const navigate = useNavigate();
-    const { data, isLoading, error } = useProperties()
+
+    const [page, setPage] = useState(1);
+    const [search, setSearch] = useState('');
+    const [debouncedSearch, setDebouncedSearch] = useState('');
+
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            setDebouncedSearch(search);
+            setPage(1);
+        }, 500);
+        return () => clearTimeout(timer);
+    }, [search]);
+
+    const { data, isLoading, error } = useProperties(page, debouncedSearch)
     const createMutation = useCreateProperty();
     const updateMutation = useUpdateProperty();
     const deleteMutation = useDeleteProperty();
@@ -31,15 +46,11 @@ const PropertiesPage = () => {
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
     const [editingProperty, setEditingProperty] = useState<Property | null>(null)
     const [propertyToDelete, setPropertyToDelete] = useState<Property | null>(null)
-    const [search, setSearch] = useState('');
 
     const mutationError = (createMutation.error || updateMutation.error) as AxiosError<LaravelValidationError>;
     const errors = mutationError?.response?.data?.errors;
 
-    const filteredProperties = data?.filter(property =>
-        property.name.toLowerCase().includes(search.toLowerCase()) ||
-        property?.full_address?.toLowerCase().includes(search.toLowerCase())
-    ) || [];
+    const properties = data?.data || [];
 
     const handleOpenCreate = () => {
         setEditingProperty(null);
@@ -189,22 +200,66 @@ const PropertiesPage = () => {
                 )}
 
                 {/* Data Grid */}
-                {data && filteredProperties.length > 0 && (
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                        {filteredProperties.map((property) => (
-                            <PropertyCard
-                                key={property.id}
-                                property={property}
-                                onEdit={handleOpenEdit}
-                                onDelete={handleOpenDelete}
-                                onViewDetails={(p) => navigate(`/properties/${p.id}`)}
-                            />
-                        ))}
+                {data && properties.length > 0 && (
+                    <div className="space-y-12">
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                            {properties.map((property) => (
+                                <PropertyCard
+                                    key={property.id}
+                                    property={property}
+                                    onEdit={handleOpenEdit}
+                                    onDelete={handleOpenDelete}
+                                    onViewDetails={(p) => navigate(`/properties/${p.id}`)}
+                                />
+                            ))}
+                        </div>
+
+                        {/* Pagination Controls */}
+                        {data.last_page > 1 && (
+                            <div className="flex flex-col sm:flex-row items-center justify-between gap-6 py-8 border-t border-white/10">
+                                <p className="text-blue-100/40 text-sm font-medium">
+                                    Showing <span className="text-white font-bold">{data.from}</span> to <span className="text-white font-bold">{data.to}</span> of <span className="text-white font-bold">{data.total}</span> results
+                                </p>
+
+                                <div className="flex items-center gap-2">
+                                    <button
+                                        onClick={() => setPage(p => Math.max(1, p - 1))}
+                                        disabled={page === 1}
+                                        className="p-2 rounded-xl bg-white/5 border border-white/10 text-white hover:bg-white/10 disabled:opacity-30 disabled:cursor-not-allowed transition-all active:scale-90"
+                                    >
+                                        <ChevronLeft size={20} />
+                                    </button>
+
+                                    <div className="flex items-center gap-2">
+                                        {data.links.filter(link => !isNaN(Number(link.label))).map((link) => (
+                                            <button
+                                                key={link.label}
+                                                onClick={() => link.page && setPage(link.page)}
+                                                className={`min-w-[40px] h-10 rounded-xl font-bold transition-all active:scale-95 ${link.active
+                                                    ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/25'
+                                                    : 'bg-white/5 border border-white/10 text-white hover:bg-white/10'
+                                                    }`}
+                                            >
+                                                {link.label}
+                                            </button>
+                                        ))}
+                                    </div>
+
+                                    <button
+                                        onClick={() => setPage(p => Math.min(data.last_page, p + 1))}
+                                        disabled={page === data.last_page}
+                                        className="p-2 rounded-xl bg-white/5 border border-white/10 text-white hover:bg-white/10 disabled:opacity-30 disabled:cursor-not-allowed transition-all active:scale-90"
+                                    >
+                                        <ChevronRight size={20} />
+                                    </button>
+                                </div>
+                            </div>
+                        )}
                     </div>
                 )}
 
                 {/* No Search Results */}
-                {data && data.length > 0 && filteredProperties.length === 0 && (
+                {data && data.total > 0 && properties.length === 0 && (
                     <div className="backdrop-blur-xl bg-white/5 border border-white/10 p-16 rounded-3xl text-center space-y-4">
                         <div className="inline-flex items-center justify-center p-4 rounded-2xl bg-white/5 mb-2">
                             <Search size={48} className="text-blue-400 opacity-50" />
@@ -221,7 +276,7 @@ const PropertiesPage = () => {
                 )}
 
                 {/* Empty State */}
-                {data && data.length === 0 && (
+                {data && data.total === 0 && (
                     <div className="backdrop-blur-xl bg-white/5 border border-white/10 p-16 rounded-3xl text-center space-y-4">
                         <div className="inline-flex items-center justify-center p-4 rounded-2xl bg-white/5 mb-2">
                             <Home size={48} className="text-blue-400 opacity-50" />
