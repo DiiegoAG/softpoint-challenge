@@ -7,7 +7,6 @@ import {
     LogOut,
     ChevronRight,
     User as UserIcon,
-    Settings,
     Menu,
     X
 } from 'lucide-react';
