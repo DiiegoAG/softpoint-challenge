@@ -129,7 +129,7 @@ const LoginPage = () => {
                     {/* Sign Up Link */}
                     <p className="text-center text-blue-100/60 text-sm">
                         Don't have an account?{' '}
-                        <a href="#" className="text-blue-400 font-bold hover:text-blue-300 underline-offset-4 hover:underline transition-all">Register for free</a>
+                        <Link to="/register" className="text-blue-400 font-bold hover:text-blue-300 underline-offset-4 hover:underline transition-all">Register for free</Link>
                     </p>
                 </div>
             </div>
