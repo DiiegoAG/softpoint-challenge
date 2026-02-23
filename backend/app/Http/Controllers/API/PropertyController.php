@@ -19,7 +19,7 @@ class PropertyController extends Controller
 
     public function index(Request $request)
     {
-        $properties = Property::ownedBy($request->user())->with('owner:id,name,email')->get();
+        $properties = Property::ownedBy($request->user())->with('owner:id,name,email')->paginate(10);
 
         return response()->json($properties, 200);
     }
