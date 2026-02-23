@@ -68,16 +68,18 @@ const PropertyCard = ({
                         {property.real_state_type}
                     </span>
 
-                    <button
-                        onClick={(e) => {
-                            e.stopPropagation();
-                            onDelete?.(property);
-                        }}
-                        className="p-2 rounded-xl bg-red-500/20 backdrop-blur-md text-red-200 hover:bg-red-500 hover:text-white transition-all active:scale-95 shadow-lg"
-                        title="Delete Property"
-                    >
-                        <Trash2 size={16} />
-                    </button>
+                    {onDelete && (
+                        <button
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                onDelete?.(property);
+                            }}
+                            className="p-2 rounded-xl bg-red-500/20 backdrop-blur-md text-red-200 hover:bg-red-500 hover:text-white transition-all active:scale-95 shadow-lg"
+                            title="Delete Property"
+                        >
+                            <Trash2 size={16} />
+                        </button>
+                    )}
                 </div>
 
                 <div className="absolute bottom-4 left-4 right-4">
@@ -138,16 +140,18 @@ const PropertyCard = ({
                         </div>
                     )}
                     <div className="flex items-center gap-2">
-                        <button
-                            onClick={(e) => {
-                                e.stopPropagation();
-                                onEdit?.(property);
-                            }}
-                            className="p-2 cursor-pointer rounded-xl text-blue-400 hover:bg-blue-400/10 transition-all active:scale-90"
-                            title="Edit"
-                        >
-                            <Pencil size={18} />
-                        </button>
+                        {onEdit && (
+                            <button
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    onEdit?.(property);
+                                }}
+                                className="p-2 cursor-pointer rounded-xl text-blue-400 hover:bg-blue-400/10 transition-all active:scale-90"
+                                title="Edit"
+                            >
+                                <Pencil size={18} />
+                            </button>
+                        )}
 
                         <button
                             onClick={() => onViewDetails?.(property)}
