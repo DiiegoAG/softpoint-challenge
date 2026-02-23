@@ -19,3 +19,8 @@ export interface RegisterPayload {
     password: string
     password_confirmation: string
 }
+
+export interface LaravelValidationError {
+    message: string
+    errors?: Record<string, string[]>
+}
